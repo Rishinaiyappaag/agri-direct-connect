@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Farm2Export Custom Colors
+				farm: {
+					primary: '#4CAF50',     // Primary green
+					secondary: '#388E3C',   // Darker green
+					accent: '#8D6E63',      // Brown accent
+					light: '#E8F5E9',       // Light green background
+					beige: '#F5F5DC',       // Light beige for backgrounds
+					yellow: '#FFC107',      // Accent yellow for highlights
+					gray: '#9E9E9E',        // Neutral gray
 				}
 			},
 			borderRadius: {
@@ -84,11 +95,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out'
 			}
 		}
 	},
