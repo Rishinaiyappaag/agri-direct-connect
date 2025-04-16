@@ -1,6 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Home, List, MessageCircle, User } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -32,16 +33,16 @@ const Index = () => {
 
       <nav className="w-full flex justify-around items-center py-4 border-t bg-white">
         <Button variant="ghost" size="icon" className="text-gray-600">
-          <HomeIcon className="h-6 w-6" />
+          <Home className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="icon" className="text-gray-600">
-          <ListIcon className="h-6 w-6" />
+          <List className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="icon" className="text-gray-600">
-          <MessageSquare className="h-6 w-6" />
+          <MessageCircle className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="icon" className="text-gray-600">
-          <UserIcon className="h-6 w-6" />
+          <User className="h-6 w-6" />
         </Button>
       </nav>
     </div>
@@ -49,4 +50,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -1,5 +1,5 @@
 
-import { Leaf, Coffee, Wheat, Pepper } from 'lucide-react';
+import { Leaf, Coffee, Wheat, CircleDot } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 interface CropPriceProps {
@@ -14,7 +14,7 @@ const CropIcon = ({ name }: { name: string }) => {
     case 'paddy':
       return <Wheat className="h-6 w-6 text-farm-accent" />;
     case 'pepper':
-      return <Pepper className="h-6 w-6 text-farm-primary" />;
+      return <CircleDot className="h-6 w-6 text-farm-primary" />;
     case 'cardamom':
     default:
       return <Leaf className="h-6 w-6 text-farm-primary" />;
@@ -34,4 +34,3 @@ const CropPriceCard = ({ cropName, price }: CropPriceProps) => {
 };
 
 export default CropPriceCard;
-
