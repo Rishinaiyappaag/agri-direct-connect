@@ -23,12 +23,6 @@ const Index = () => {
         >
           Get Started
         </Button>
-
-        <img 
-          src="/lovable-uploads/ae08b892-6455-4544-8146-260b06b4f9a4.png" 
-          alt="Farmer and exporter handshake" 
-          className="w-full max-w-sm mt-8"
-        />
       </div>
 
       <nav className="w-full flex justify-around items-center py-4 border-t bg-white">
