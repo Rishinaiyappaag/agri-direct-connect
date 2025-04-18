@@ -1,10 +1,14 @@
 
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, List, MessageCircle, User } from 'lucide-react';
+import { Home, List, MessageCircle, User, Tractor, Briefcase } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
+
+  const handleSignUp = (role: 'farmer' | 'exporter') => {
+    navigate('/signup', { state: { defaultRole: role } });
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-between p-6 bg-farm-light">
@@ -17,12 +21,34 @@ const Index = () => {
           Connect farmers with exporters for high-demand commodities such as coffee, paddy, pepper, cardamom, and cinnamon.
         </p>
 
-        <Button 
-          onClick={() => navigate('/login')}
-          className="bg-farm-primary hover:bg-farm-secondary text-white px-8 py-6 text-lg shadow-md transition-colors"
-        >
-          Get Started
-        </Button>
+        <div className="flex flex-col gap-4 w-full max-w-xs">
+          <Button 
+            onClick={() => handleSignUp('farmer')}
+            className="bg-farm-primary hover:bg-farm-secondary text-white px-8 py-6 text-lg shadow-md transition-colors flex justify-center items-center gap-3"
+          >
+            <Tractor className="w-6 h-6" />
+            Register as Farmer
+          </Button>
+
+          <Button 
+            onClick={() => handleSignUp('exporter')}
+            className="bg-farm-primary hover:bg-farm-secondary text-white px-8 py-6 text-lg shadow-md transition-colors flex justify-center items-center gap-3"
+          >
+            <Briefcase className="w-6 h-6" />
+            Register as Exporter
+          </Button>
+
+          <p className="text-farm-secondary text-sm mt-2">
+            Already have an account?{' '}
+            <Button 
+              variant="link" 
+              onClick={() => navigate('/login')} 
+              className="text-farm-primary p-0 h-auto font-semibold"
+            >
+              Sign In
+            </Button>
+          </p>
+        </div>
       </div>
 
       <nav className="w-full flex justify-around items-center py-4 border-t bg-white">

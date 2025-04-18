@@ -1,21 +1,24 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useAuth } from '@/contexts/AuthContext';
+import { Tractor, Briefcase } from '@/components/ui/icons';
 
 type UserRole = 'farmer' | 'exporter';
 
 const SignUp = () => {
+  const location = useLocation();
+  const defaultRole = location.state?.defaultRole || 'farmer';
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<UserRole>('farmer');
+  const [role, setRole] = useState<UserRole>(defaultRole);
   const [isLoading, setIsLoading] = useState(false);
   
   const { signUp } = useAuth();
@@ -148,11 +151,17 @@ const SignUp = () => {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="farmer" id="farmer" />
-                <Label htmlFor="farmer">Farmer</Label>
+                <Label htmlFor="farmer" className="flex items-center gap-2">
+                  <Tractor className="w-4 h-4" />
+                  Farmer
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="exporter" id="exporter" />
-                <Label htmlFor="exporter">Exporter</Label>
+                <Label htmlFor="exporter" className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4" />
+                  Exporter
+                </Label>
               </div>
             </RadioGroup>
           </div>
