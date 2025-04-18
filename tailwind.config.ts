@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -65,11 +64,11 @@ export default {
 				},
 				// Farm2Export Custom Colors
 				farm: {
-					primary: '#4CAF50',     // Primary green
-					secondary: '#388E3C',   // Darker green
-					accent: '#8D6E63',      // Brown accent
-					light: '#E8F5E9',       // Light green background
-					beige: '#F5F5DC',       // Light beige for backgrounds
+					primary: '#8D6E63',     // Soft brown (primary)
+					secondary: '#6D4C41',   // Darker brown
+					accent: '#D7CCC8',      // Light cream/beige
+					light: '#EFEBE9',       // Very light cream background
+					beige: '#F5F5DC',       // Classic beige 
 					yellow: '#FFC107',      // Accent yellow for highlights
 					gray: '#9E9E9E',        // Neutral gray
 				}

@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,6 +33,10 @@
     --ring: 122 39% 49%;
 
     --radius: 0.5rem;
+
+    --farm-primary: 16 30% 50%;
+    --farm-secondary: 16 35% 40%;
+    --farm-accent: 14 30% 87%;
   }
 
   .dark {
