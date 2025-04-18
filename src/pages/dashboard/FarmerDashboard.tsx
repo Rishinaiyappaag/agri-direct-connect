@@ -1,18 +1,10 @@
 
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import CropPriceCard from '@/components/CropPriceCard';
 import { Card } from '@/components/ui/card';
 import { UserCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-
-const CURRENT_PRICES = [
-  { name: 'Coffee', price: 210 },
-  { name: 'Paddy', price: 22 },
-  { name: 'Pepper', price: 380 },
-  { name: 'Cardamom', price: 1420 }
-];
+import NearbyExporters from '@/components/NearbyExporters';
 
 const FarmerDashboard = () => {
   const navigate = useNavigate();
@@ -32,20 +24,12 @@ const FarmerDashboard = () => {
         </Button>
 
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Current Prices</h2>
-          <div className="space-y-3">
-            {CURRENT_PRICES.map(crop => (
-              <CropPriceCard 
-                key={crop.name} 
-                cropName={crop.name} 
-                price={crop.price} 
-              />
-            ))}
-          </div>
+          <h2 className="text-xl font-semibold">Nearby Exporters</h2>
+          <NearbyExporters />
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Inquiries</h2>
+          <h2 className="text-xl font-semibold">Recent Inquiries</h2>
           <Card className="p-4">
             <div className="flex items-center gap-3">
               <UserCircle className="h-10 w-10 text-gray-400" />
@@ -63,4 +47,3 @@ const FarmerDashboard = () => {
 };
 
 export default FarmerDashboard;
-
