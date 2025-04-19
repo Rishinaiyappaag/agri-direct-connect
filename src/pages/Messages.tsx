@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,102 +6,51 @@ import { Input } from '@/components/ui/input';
 import UserAvatar from '@/components/UserAvatar';
 import MessageItem from '@/components/MessageItem';
 import { Send } from 'lucide-react';
-
-// Mock contacts data
-const MOCK_CONTACTS = [
-  {
-    id: '1',
-    name: 'Global Crop Traders',
-    role: 'exporter' as const,
-    lastMessage: 'Can you provide samples of your coffee beans?',
-    timestamp: '2h ago',
-    unread: 2,
-  },
-  {
-    id: '2',
-    name: 'Agro World Exports',
-    role: 'exporter' as const,
-    lastMessage: 'We are interested in buying your paddy harvest',
-    timestamp: '1d ago',
-    unread: 0,
-  },
-  {
-    id: '3',
-    name: 'Rajesh Kumar',
-    role: 'farmer' as const,
-    lastMessage: 'What is your current buying price for pepper?',
-    timestamp: '3d ago',
-    unread: 0,
-  }
-];
-
-// Mock messages for a conversation
-const MOCK_MESSAGES = [
-  {
-    id: '1',
-    senderId: '1',
-    receiverId: 'currentUser',
-    message: 'Hello! I saw you have coffee beans for sale. What variety are they?',
-    timestamp: '10:30 AM',
-  },
-  {
-    id: '2',
-    senderId: 'currentUser',
-    receiverId: '1',
-    message: 'Hi! Yes, I have Arabica coffee beans. They are of premium quality.',
-    timestamp: '10:32 AM',
-  },
-  {
-    id: '3',
-    senderId: '1',
-    receiverId: 'currentUser',
-    message: 'Great! What quantity can you provide?',
-    timestamp: '10:35 AM',
-  },
-  {
-    id: '4',
-    senderId: 'currentUser',
-    receiverId: '1',
-    message: 'I currently have 500kg available for immediate sale.',
-    timestamp: '10:36 AM',
-  },
-  {
-    id: '5',
-    senderId: '1',
-    receiverId: 'currentUser',
-    message: 'Perfect! Our current buying price is ₹185 per kg. Would you be able to deliver to our warehouse in Kerala?',
-    timestamp: '10:40 AM',
-  }
-];
+import { useMessages } from '@/hooks/useMessages';
 
 const Messages = () => {
   const { contactId } = useParams();
   const { currentUser } = useAuth();
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState(MOCK_MESSAGES);
+  const { messages, loading, sendMessage } = useMessages(currentUser, contactId);
   const navigate = useNavigate();
   
-  // Find selected contact
+  const MOCK_CONTACTS = [
+    {
+      id: '1',
+      name: 'Global Crop Traders',
+      role: 'exporter' as const,
+      lastMessage: 'Can you provide samples of your coffee beans?',
+      timestamp: '2h ago',
+      unread: 2,
+    },
+    {
+      id: '2',
+      name: 'Agro World Exports',
+      role: 'exporter' as const,
+      lastMessage: 'We are interested in buying your paddy harvest',
+      timestamp: '1d ago',
+      unread: 0,
+    },
+    {
+      id: '3',
+      name: 'Rajesh Kumar',
+      role: 'farmer' as const,
+      lastMessage: 'What is your current buying price for pepper?',
+      timestamp: '3d ago',
+      unread: 0,
+    }
+  ];
+
   const selectedContact = contactId 
     ? MOCK_CONTACTS.find(contact => contact.id === contactId) 
     : null;
   
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim() || !contactId) return;
     
-    const newMessage = {
-      id: Date.now().toString(),
-      senderId: 'currentUser',
-      receiverId: contactId,
-      message: message.trim(),
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-    
-    setMessages(prev => [...prev, newMessage]);
+    await sendMessage(message.trim());
     setMessage('');
-    
-    // In a real implementation, this would save to Firebase
-    console.log('Sending message:', newMessage);
   };
   
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -116,7 +64,6 @@ const Messages = () => {
     <div className="container mx-auto py-6 px-4">
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-160px)]">
         <div className="grid grid-cols-12 h-full">
-          {/* Contact list (left sidebar) */}
           <div className="col-span-4 border-r border-gray-200 overflow-y-auto">
             <div className="p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold">Messages</h2>
@@ -159,11 +106,9 @@ const Messages = () => {
             </div>
           </div>
           
-          {/* Chat window (right side) */}
           <div className="col-span-8 flex flex-col h-full">
             {selectedContact ? (
               <>
-                {/* Chat header */}
                 <div className="p-4 border-b border-gray-200 flex items-center gap-3">
                   <UserAvatar 
                     name={selectedContact.name} 
@@ -178,27 +123,29 @@ const Messages = () => {
                   </div>
                 </div>
                 
-                {/* Messages area */}
                 <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-                  {messages.map(msg => (
-                    <MessageItem
-                      key={msg.id}
-                      message={msg.message}
-                      sender={msg.senderId === 'currentUser' 
-                        ? currentUser?.name || 'You'
-                        : selectedContact.name
-                      }
-                      timestamp={msg.timestamp}
-                      isCurrentUser={msg.senderId === 'currentUser'}
-                      senderRole={msg.senderId === 'currentUser' 
-                        ? currentUser?.role 
-                        : selectedContact.role
-                      }
-                    />
-                  ))}
+                  {loading ? (
+                    <div className="text-center text-gray-500">Loading messages...</div>
+                  ) : (
+                    messages.map(msg => (
+                      <MessageItem
+                        key={msg.id}
+                        message={msg.content}
+                        sender={msg.sender_id === currentUser?.id 
+                          ? currentUser?.name || 'You'
+                          : selectedContact.name
+                        }
+                        timestamp={new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        isCurrentUser={msg.sender_id === currentUser?.id}
+                        senderRole={msg.sender_id === currentUser?.id 
+                          ? currentUser?.role 
+                          : selectedContact.role
+                        }
+                      />
+                    ))
+                  )}
                 </div>
                 
-                {/* Message input */}
                 <div className="p-4 border-t border-gray-200">
                   <div className="flex gap-2">
                     <Input
@@ -210,7 +157,7 @@ const Messages = () => {
                     />
                     <Button
                       onClick={handleSendMessage}
-                      disabled={!message.trim()}
+                      disabled={!message.trim() || loading}
                       className="bg-farm-primary hover:bg-farm-secondary"
                     >
                       <Send size={18} />
