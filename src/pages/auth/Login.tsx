@@ -4,11 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { useAuth } from '@/contexts/AuthContext';
+import { Briefcase, Tractor } from 'lucide-react';
+
+type UserRole = 'farmer' | 'exporter';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<UserRole>('farmer');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
   const { toast } = useToast();
@@ -27,7 +33,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      await signIn(email, password);
+      await signIn(email, password, role);
       navigate('/dashboard');
     } catch (error) {
       let message = "Failed to sign in";
@@ -85,6 +91,30 @@ const Login = () => {
               className="w-full"
               required
             />
+          </div>
+
+          <div className="py-2">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">I am a:</h3>
+            <RadioGroup 
+              value={role} 
+              onValueChange={(value: UserRole) => setRole(value)}
+              className="flex gap-6"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="farmer" id="farmer" />
+                <Label htmlFor="farmer" className="flex items-center gap-2">
+                  <Tractor className="w-4 h-4" />
+                  Farmer
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="exporter" id="exporter" />
+                <Label htmlFor="exporter" className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4" />
+                  Exporter
+                </Label>
+              </div>
+            </RadioGroup>
           </div>
 
           <Button 
