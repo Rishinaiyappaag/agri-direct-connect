@@ -16,7 +16,7 @@ interface User {
 interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, role: UserRole) => Promise<void>;
   signUp: (email: string, password: string, name: string, role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
   updateUserProfile: (data: Partial<User>) => Promise<void>;
@@ -42,17 +42,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Note: Actual Firebase implementation will be added later
   // This is a mock implementation for now
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, role: UserRole) => {
     // Mock implementation
     setLoading(true);
     try {
       // In real implementation, this would use Firebase auth
-      console.log('Signing in with:', email, password);
+      console.log('Signing in with:', email, password, role);
       const mockUser = {
         uid: '123',
         email,
         name: 'Test User',
-        role: 'farmer' as UserRole,
+        role,
       };
       setCurrentUser(mockUser);
     } catch (error) {
