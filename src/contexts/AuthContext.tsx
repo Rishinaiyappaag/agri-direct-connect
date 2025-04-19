@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define types
@@ -8,9 +7,11 @@ interface User {
   uid: string;
   email: string;
   name?: string;
+  phone?: string;
   role?: UserRole;
   region?: string;
   cropsInterested?: string[];
+  imageUrl?: string;
 }
 
 interface AuthContextType {

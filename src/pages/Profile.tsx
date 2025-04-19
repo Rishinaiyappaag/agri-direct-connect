@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '@/components/UserAvatar';
+import { Phone, Mail } from 'lucide-react';
 import { 
   Card,
   CardContent,
@@ -21,11 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Checkbox
-} from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 
-// Crop options for multi-select
 const CROP_OPTIONS = [
   { id: 'coffee', label: 'Coffee' },
   { id: 'paddy', label: 'Paddy (Rice)' },
@@ -34,7 +31,6 @@ const CROP_OPTIONS = [
   { id: 'cinnamon', label: 'Cinnamon' },
 ];
 
-// Region options
 const REGION_OPTIONS = [
   { value: 'kerala', label: 'Kerala' },
   { value: 'karnataka', label: 'Karnataka' },
@@ -47,6 +43,8 @@ const Profile = () => {
   const { toast } = useToast();
   
   const [name, setName] = useState(currentUser?.name || '');
+  const [email, setEmail] = useState(currentUser?.email || '');
+  const [phone, setPhone] = useState(currentUser?.phone || '');
   const [region, setRegion] = useState(currentUser?.region || '');
   const [selectedCrops, setSelectedCrops] = useState<string[]>(
     currentUser?.cropsInterested || []
@@ -67,6 +65,7 @@ const Profile = () => {
     try {
       await updateUserProfile({
         name,
+        phone,
         region,
         cropsInterested: selectedCrops,
       });
@@ -101,24 +100,24 @@ const Profile = () => {
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Your Profile</h1>
+        <h1 className="text-2xl font-bold text-farm-primary mb-6">Your Profile</h1>
         
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
+        <Card className="border-farm-accent shadow-sm">
+          <CardHeader className="flex flex-row items-center gap-4 border-b border-farm-accent/20">
             <UserAvatar 
               name={currentUser?.name || 'User'} 
               role={currentUser?.role}
               size="lg"
             />
             <div>
-              <CardTitle>{currentUser?.name || 'User'}</CardTitle>
-              <CardDescription className="capitalize">
+              <CardTitle className="text-farm-primary">{currentUser?.name || 'User'}</CardTitle>
+              <CardDescription className="capitalize text-farm-secondary">
                 {currentUser?.role || 'User'}
               </CardDescription>
             </div>
           </CardHeader>
           
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 pt-6">
             <div className="space-y-4">
               <div>
                 <Label htmlFor="name">Full Name</Label>
@@ -127,17 +126,35 @@ const Profile = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
+                  className="border-farm-accent/50 focus-visible:ring-farm-primary"
                 />
               </div>
               
               <div>
+                <Label htmlFor="phone">Phone Number</Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-2.5 h-5 w-5 text-farm-primary/50" />
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Your phone number"
+                    className="pl-10 border-farm-accent/50 focus-visible:ring-farm-primary"
+                  />
+                </div>
+              </div>
+
+              <div>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  value={currentUser?.email || ''}
-                  disabled
-                  className="bg-gray-50"
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-2.5 h-5 w-5 text-farm-primary/50" />
+                  <Input
+                    id="email"
+                    value={email}
+                    disabled
+                    className="pl-10 bg-farm-accent/10"
+                  />
+                </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Email cannot be changed
                 </p>
@@ -149,7 +166,7 @@ const Profile = () => {
                   value={region} 
                   onValueChange={setRegion}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-farm-accent/50">
                     <SelectValue placeholder="Select your region" />
                   </SelectTrigger>
                   <SelectContent>
@@ -189,7 +206,7 @@ const Profile = () => {
             <Button 
               onClick={handleSaveProfile}
               disabled={isLoading}
-              className="bg-farm-primary hover:bg-farm-secondary"
+              className="bg-farm-primary hover:bg-farm-secondary text-white"
             >
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>
